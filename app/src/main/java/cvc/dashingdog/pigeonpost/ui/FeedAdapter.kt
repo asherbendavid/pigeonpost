@@ -1,14 +1,18 @@
 package cvc.dashingdog.pigeonpost.ui
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import cvc.dashingdog.pigeonpost.R
+import cvc.dashingdog.pigeonpost.data.FeedItem
 
-class FeedAdapter(private var items: List<FeedItem>) :
-    RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
+class FeedAdapter(
+    private var items: List<FeedItem>,
+    private var newTitles: Set<String> = emptySet()
+) : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
 
     class FeedViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.textTitle)
@@ -23,14 +27,17 @@ class FeedAdapter(private var items: List<FeedItem>) :
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
         val item = items[position]
-        holder.title.text = item.title
+        val isNew = item.title in newTitles
+        holder.title.text = if (isNew) "🆕 ${item.title}" else item.title
         holder.published.text = item.published
+        holder.title.setTextColor(if (isNew) Color.rgb(0, 120, 0) else Color.BLACK)
     }
 
     override fun getItemCount() = items.size
 
-    fun submitList(newItems: List<FeedItem>) {
+    fun submitList(newItems: List<FeedItem>, newlyAdded: Set<String> = emptySet()) {
         items = newItems
+        newTitles = newlyAdded
         notifyDataSetChanged()
     }
 }

@@ -1,4 +1,4 @@
-package cvc.dashingdog.pigeonpost.ui
+package cvc.dashingdog.pigeonpost.data
 
 data class FeedItem(
     val title: String,
