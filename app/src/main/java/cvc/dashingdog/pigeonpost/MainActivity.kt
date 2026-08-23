@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             checkFeed()
         }
 
-        WorkScheduler.schedule(WorkManager.getInstance(applicationContext))
+        WorkScheduler.scheduleTestInterval(WorkManager.getInstance(applicationContext))
     }
 
     private fun requestNotificationPermissionIfNeeded() {
