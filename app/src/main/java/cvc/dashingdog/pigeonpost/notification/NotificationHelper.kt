@@ -8,6 +8,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import cvc.dashingdog.pigeonpost.MainActivity
+import cvc.dashingdog.pigeonpost.R
 import cvc.dashingdog.pigeonpost.data.FeedItem
 
 object NotificationHelper {
@@ -47,7 +48,7 @@ object NotificationHelper {
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_dialog_info) // placeholder, real icon in Phase 6
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle("PigeonPost")
             .setContentText(if (newItems.size == 1) contentText else "${newItems.size} new releases")
             .setStyle(NotificationCompat.BigTextStyle().bigText(contentText))

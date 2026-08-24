@@ -8,6 +8,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -31,6 +33,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: FeedAdapter
     private lateinit var repository: FeedRepository
     private lateinit var swipeRefresh: SwipeRefreshLayout
+    private lateinit var textEmptyState: TextView
+    private lateinit var textErrorState: TextView
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { /* no-op either way */ }
@@ -40,6 +44,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
+        textEmptyState = findViewById(R.id.textEmptyState)
+        textErrorState = findViewById(R.id.textErrorState)
 
         NotificationHelper.createChannel(this)
         requestNotificationPermissionIfNeeded()
@@ -106,8 +112,19 @@ class MainActivity : AppCompatActivity() {
                 val result = repository.checkForUpdates()
                 val newTitles = result.newItems.map { it.title }.toSet()
                 adapter.submitList(result.filteredItems, newTitles)
+
+                textErrorState.visibility = View.GONE
+                textEmptyState.visibility =
+                    if (result.filteredItems.isEmpty()) View.VISIBLE else View.GONE
             } catch (e: Exception) {
                 e.printStackTrace()
+                // Only show the error state if we have nothing to show at all —
+                // if the list already has content from a previous successful
+                // load, leave it displayed rather than replacing it with an error.
+                if (adapter.itemCount == 0) {
+                    textErrorState.visibility = View.VISIBLE
+                    textEmptyState.visibility = View.GONE
+                }
             } finally {
                 swipeRefresh.isRefreshing = false
             }
