@@ -11,7 +11,8 @@ import cvc.dashingdog.pigeonpost.data.FeedItem
 
 class FeedAdapter(
     private var items: List<FeedItem>,
-    private var newTitles: Set<String> = emptySet()
+    private var newTitles: Set<String> = emptySet(),
+    private val onItemClick: (FeedItem) -> Unit
 ) : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
 
     class FeedViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -31,6 +32,7 @@ class FeedAdapter(
         holder.title.text = if (isNew) "🆕 ${item.title}" else item.title
         holder.published.text = item.published
         holder.title.setTextColor(if (isNew) Color.rgb(0, 120, 0) else Color.BLACK)
+        holder.itemView.setOnClickListener { onItemClick(item) }
     }
 
     override fun getItemCount() = items.size

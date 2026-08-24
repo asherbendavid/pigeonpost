@@ -2,10 +2,12 @@ package cvc.dashingdog.pigeonpost.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import cvc.dashingdog.pigeonpost.R
+import cvc.dashingdog.pigeonpost.MainActivity
 import cvc.dashingdog.pigeonpost.data.FeedItem
 
 object NotificationHelper {
@@ -34,17 +36,25 @@ object NotificationHelper {
             "${newItems.size} new releases: ${newItems.joinToString(", ") { it.title }}"
         }
 
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info) // placeholder, real icon in Phase 6
             .setContentTitle("PigeonPost")
             .setContentText(if (newItems.size == 1) contentText else "${newItems.size} new releases")
             .setStyle(NotificationCompat.BigTextStyle().bigText(contentText))
             .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
             .build()
 
-        // Guard: POST_NOTIFICATIONS may not be granted; NotificationManagerCompat
-        // handles the check gracefully on pre-33 devices, but we still catch
-        // SecurityException defensively since this must fail silently.
         try {
             NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
         } catch (e: SecurityException) {
