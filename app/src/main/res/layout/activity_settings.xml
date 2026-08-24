@@ -32,6 +32,13 @@
         android:layout_marginBottom="24dp" />
 
     <Button
+        android:id="@+id/buttonTestNotification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Test Notification" />
+
+    <Button
         android:id="@+id/buttonSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

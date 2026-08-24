@@ -9,13 +9,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.work.WorkManager
+import cvc.dashingdog.pigeonpost.data.BloggerApi
 import cvc.dashingdog.pigeonpost.data.SettingsStore
+import cvc.dashingdog.pigeonpost.notification.NotificationHelper
 import cvc.dashingdog.pigeonpost.worker.WorkScheduler
 import kotlinx.coroutines.launch
 
 class SettingsActivity : AppCompatActivity() {
 
-    // label -> hours
     private val intervalOptions = listOf(
         "Every 6 hours" to 6L,
         "Every 12 hours" to 12L,
@@ -47,13 +48,17 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<Button>(R.id.buttonSave).setOnClickListener {
             saveSettings()
         }
+
+        findViewById<Button>(R.id.buttonTestNotification).setOnClickListener {
+            testNotification()
+        }
     }
 
     private fun loadCurrentSettings() {
         lifecycleScope.launch {
             val currentHours = settings.getIntervalHours()
             val index = intervalOptions.indexOfFirst { it.second == currentHours }
-                .let { if (it == -1) 3 else it } // default to "Every 2 days" if no exact match
+                .let { if (it == -1) 3 else it }
             spinnerInterval.setSelection(index)
 
             val keywords = settings.getExcludeKeywords()
@@ -76,6 +81,27 @@ class SettingsActivity : AppCompatActivity() {
 
             Toast.makeText(this@SettingsActivity, "Settings saved", Toast.LENGTH_SHORT).show()
             finish()
+        }
+    }
+
+    private fun testNotification() {
+        lifecycleScope.launch {
+            try {
+                val response = BloggerApi.create().getFeed()
+                val latest = response.feed.entry?.firstOrNull()
+                if (latest == null) {
+                    Toast.makeText(this@SettingsActivity, "No feed entries found", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
+                val item = cvc.dashingdog.pigeonpost.data.FeedItem(
+                    title = latest.title.`$t`,
+                    published = latest.published.`$t`,
+                    link = latest.link?.firstOrNull { it.rel == "alternate" }?.href
+                )
+                NotificationHelper.notifyNewItems(this@SettingsActivity, listOf(item))
+            } catch (e: Exception) {
+                Toast.makeText(this@SettingsActivity, "Test failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
