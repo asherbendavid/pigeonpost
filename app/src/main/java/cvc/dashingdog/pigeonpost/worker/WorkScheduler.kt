@@ -9,14 +9,15 @@ object WorkScheduler {
 
     private const val WORK_NAME = "pigeonpost_feed_check"
 
-    fun schedule(workManager: WorkManager, intervalHours: Long = 48) {
+    fun schedule(workManager: WorkManager, intervalHours: Long) {
+        val safeInterval = intervalHours.coerceAtLeast(1) // WorkManager floor is 15 min; hours granularity is fine here
         val request = PeriodicWorkRequestBuilder<FeedCheckWorker>(
-            intervalHours, TimeUnit.HOURS
+            safeInterval, TimeUnit.HOURS
         ).build()
 
         workManager.enqueueUniquePeriodicWork(
             WORK_NAME,
-            ExistingPeriodicWorkPolicy.UPDATE, // lets a future Settings change reschedule cleanly
+            ExistingPeriodicWorkPolicy.UPDATE,
             request
         )
     }

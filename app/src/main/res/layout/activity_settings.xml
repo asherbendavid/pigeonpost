@@ -8,6 +8,33 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings coming in Phase 5" />
+        android:text="Check for updates every:"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/spinnerInterval"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exclude titles containing (comma-separated):"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editKeywords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="e.g. Canary, Beta"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save" />
 
 </LinearLayout>

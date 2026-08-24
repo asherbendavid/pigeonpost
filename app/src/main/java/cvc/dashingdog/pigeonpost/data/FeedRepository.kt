@@ -2,12 +2,9 @@ package cvc.dashingdog.pigeonpost.data
 
 class FeedRepository(
     private val api: BloggerApi,
-    private val store: FeedStore
+    private val store: FeedStore,
+    private val settings: SettingsStore
 ) {
-    fun isRelevant(title: String): Boolean =
-        !title.contains("Canary", ignoreCase = true)
-
-    /** Result of a single check: full filtered list, plus which entries are new since last save. */
     data class CheckResult(
         val filteredItems: List<FeedItem>,
         val newItems: List<FeedItem>
@@ -23,7 +20,10 @@ class FeedRepository(
             )
         } ?: emptyList()
 
-        val filtered = fetched.filter { isRelevant(it.title) }
+        val excludeKeywords = settings.getExcludeKeywords()
+        val filtered = fetched.filter { item ->
+            excludeKeywords.none { keyword -> item.title.contains(keyword, ignoreCase = true) }
+        }
 
         val previous = store.loadSavedItems()
         val previousTitles = previous.map { it.title }.toSet()

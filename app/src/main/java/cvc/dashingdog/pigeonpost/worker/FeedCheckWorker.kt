@@ -6,6 +6,7 @@ import androidx.work.WorkerParameters
 import cvc.dashingdog.pigeonpost.data.BloggerApi
 import cvc.dashingdog.pigeonpost.data.FeedRepository
 import cvc.dashingdog.pigeonpost.data.FeedStore
+import cvc.dashingdog.pigeonpost.data.SettingsStore
 import cvc.dashingdog.pigeonpost.notification.NotificationHelper
 
 class FeedCheckWorker(
@@ -14,10 +15,12 @@ class FeedCheckWorker(
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
-        val repository = FeedRepository(BloggerApi.create(), FeedStore(applicationContext))
+        val repository = FeedRepository(
+            BloggerApi.create(),
+            FeedStore(applicationContext),
+            SettingsStore(applicationContext)
+        )
 
-        // Single inline retry on failure — not WorkManager's backoff, just one
-        // immediate second attempt for transient network blips.
         val result = runCatching { repository.checkForUpdates() }
             .recoverCatching { repository.checkForUpdates() }
             .getOrNull()
@@ -26,8 +29,6 @@ class FeedCheckWorker(
             NotificationHelper.notifyNewItems(applicationContext, result.newItems)
         }
 
-        // Always success — a failed poll just means the next scheduled run
-        // will try again; no need for WorkManager's own retry/backoff.
         return Result.success()
     }
 }

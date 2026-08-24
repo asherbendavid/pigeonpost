@@ -20,6 +20,7 @@ import androidx.work.WorkManager
 import cvc.dashingdog.pigeonpost.data.BloggerApi
 import cvc.dashingdog.pigeonpost.data.FeedRepository
 import cvc.dashingdog.pigeonpost.data.FeedStore
+import cvc.dashingdog.pigeonpost.data.SettingsStore
 import cvc.dashingdog.pigeonpost.notification.NotificationHelper
 import cvc.dashingdog.pigeonpost.ui.FeedAdapter
 import cvc.dashingdog.pigeonpost.worker.WorkScheduler
@@ -45,7 +46,8 @@ class MainActivity : AppCompatActivity() {
 
         val api = BloggerApi.create()
         val store = FeedStore(applicationContext)
-        repository = FeedRepository(api, store)
+        val settings = SettingsStore(applicationContext)
+        repository = FeedRepository(api, store, settings)
 
         adapter = FeedAdapter(emptyList()) { item ->
             item.link?.let { url ->
@@ -60,7 +62,10 @@ class MainActivity : AppCompatActivity() {
         swipeRefresh = findViewById(R.id.swipeRefresh)
         swipeRefresh.setOnRefreshListener { checkFeed() }
 
-        WorkScheduler.schedule(WorkManager.getInstance(applicationContext))
+        lifecycleScope.launch {
+            val hours = settings.getIntervalHours()
+            WorkScheduler.schedule(WorkManager.getInstance(applicationContext), hours)
+        }
 
         checkFeed() // initial load on app open
     }
