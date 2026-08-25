@@ -14,43 +14,43 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:text="PigeonPost 🕊️" />
+            android:text="@string/pigeonpost_about_title" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Version 1.0" />
+            android:text="@string/version_string" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Watches the Android Studio release blog and notifies you when a new stable, RC, or patch release goes live. Built to stay generic enough to one day watch other IDE release feeds too." />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textStyle="bold"
-            android:text="License" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BSD-3-Clause. See ATTRIBUTIONS.md in the repository for full credits." />
+            android:text="@string/info_string" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:textStyle="bold"
-            android:text="Part of the cvc.dashingdog family" />
+            android:text="@string/license" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Single-purpose, ad-free personal tools." />
+            android:text="@string/license_text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textStyle="bold"
+            android:text="@string/dashingdog_family" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dashingdog_extra_info_string" />
 
     </LinearLayout>
 

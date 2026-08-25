@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="No releases loaded yet.\nPull down to check."
+            android:text="@string/empty_state_placeholder_string"
             android:textAlignment="center"
             android:visibility="gone" />
 
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Couldn't reach the feed.\nPull down to try again."
+            android:text="@string/error_state_placeholder_string"
             android:textAlignment="center"
             android:visibility="gone" />
 

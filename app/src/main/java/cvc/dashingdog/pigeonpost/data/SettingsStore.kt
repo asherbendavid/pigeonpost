@@ -22,7 +22,7 @@ class SettingsStore(private val context: Context) {
     suspend fun getIntervalHours(): Long {
         return try {
             context.settingsDataStore.data.first()[intervalKey] ?: DEFAULT_INTERVAL_HOURS
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             DEFAULT_INTERVAL_HOURS
         }
     }
@@ -30,7 +30,7 @@ class SettingsStore(private val context: Context) {
     suspend fun setIntervalHours(hours: Long) {
         try {
             context.settingsDataStore.edit { it[intervalKey] = hours }
-        } catch (e: Exception) { /* fail silently, non-critical */ }
+        } catch (_: Exception) { /* fail silently, non-critical */ }
     }
 
     /** Comma-separated keywords; a title is excluded if it contains any of them. */
@@ -38,7 +38,7 @@ class SettingsStore(private val context: Context) {
         return try {
             val raw = context.settingsDataStore.data.first()[filterKey] ?: DEFAULT_EXCLUDE_KEYWORDS
             raw.split(",").map { it.trim() }.filter { it.isNotEmpty() }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             listOf(DEFAULT_EXCLUDE_KEYWORDS)
         }
     }
@@ -47,6 +47,6 @@ class SettingsStore(private val context: Context) {
         try {
             val raw = keywords.joinToString(",")
             context.settingsDataStore.edit { it[filterKey] = raw }
-        } catch (e: Exception) { /* fail silently */ }
+        } catch (_: Exception) { /* fail silently */ }
     }
 }

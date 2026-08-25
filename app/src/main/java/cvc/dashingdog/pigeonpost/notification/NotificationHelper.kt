@@ -58,7 +58,7 @@ object NotificationHelper {
 
         try {
             NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
-        } catch (e: SecurityException) {
+        } catch (_: SecurityException) {
             // No permission — silently skip, per spec (non-critical app)
         }
     }

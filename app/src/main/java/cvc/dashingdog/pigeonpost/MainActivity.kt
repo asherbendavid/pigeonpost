@@ -27,6 +27,7 @@ import cvc.dashingdog.pigeonpost.notification.NotificationHelper
 import cvc.dashingdog.pigeonpost.ui.FeedAdapter
 import cvc.dashingdog.pigeonpost.worker.WorkScheduler
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
 
 class MainActivity : AppCompatActivity() {
 
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         adapter = FeedAdapter(emptyList()) { item ->
             item.link?.let { url ->
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
             }
         }
         findViewById<RecyclerView>(R.id.recyclerFeed).apply {

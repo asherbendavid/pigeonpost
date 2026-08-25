@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Check for updates every:"
+        android:text="@string/check_for_updates"
         android:textStyle="bold" />
 
     <Spinner
@@ -20,14 +20,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Exclude titles containing (comma-separated):"
+        android:text="@string/exclude_string"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editKeywords"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="e.g. Canary, Beta"
+        android:hint="@string/exclution_hint"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="24dp" />
 
@@ -36,12 +36,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Test Notification" />
+        android:text="@string/test_notification_button_text" />
 
     <Button
         android:id="@+id/buttonSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save" />
+        android:text="@string/save_button_text" />
 
 </LinearLayout>
